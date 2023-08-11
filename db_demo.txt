@@ -1,0 +1,36 @@
+source ./db_demo_core.sh
+
+clear
+while :
+do
+	# show menu
+	echo "Q1 (first.os1db)"
+	echo "1) Add new record"
+	echo "2) Delete a record"
+	echo "3) Search for a record"
+	echo "4) Update a rercord"
+	echo "5) Exit"
+	echo "6) view data"
+	echo "---------------------------------"
+	read -r -p "Select an option please: " option
+	# take action
+	case $option in
+		1) 	
+		AddRecord
+		;;
+		2) 
+		DeleteRecord
+		;;
+		3)
+		SearchRecord
+		;;
+		4)
+		UpdateRecord
+		;;
+		5) break;;
+		6) cat os1db
+		;;
+		*) echo "please Select between 1 to 6 only"
+	esac
+done
+

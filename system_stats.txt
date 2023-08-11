@@ -1,0 +1,29 @@
+path=/opt/monitoring1.txt
+cunt=0
+date=$(date)
+echo  "######################################" >> $path
+echo  $date >> $path
+echo  "######################################" >> $path
+ 
+while [ $cunt -lt 720 ]
+do 
+   cunt=`expr $cunt + 1`
+
+ # Get the current usage of CPU and memory
+  cpuUsage=$(top -bn1 | awk '/Cpu/ { print $2}')
+  memUsage=$(free -m | awk '/Mem/{print $3*100/$3}')
+  diskUsage=$(df -h | awk '$NF=="/"{print $3/$2,$5}')
+  # Print the usage
+  echo "CPU Usage: $cpuUsage%" >>$path
+  echo "Memory Usage: $memUsage %">>$path
+  echo "Disk Usage: $diskUsage">>$path
+  echo " ">>$path
+  echo " ">>$path
+  echo " ">>$path
+
+  # Sleep for 5 second
+  sleep 5
+done
+#DiskUsage=  df -h | awk '$NF=="/"{printf "Disk Usage: %d/%dGB (%s)\n", $3,$2,$5}'
+#CpuUsage= top -bn1 | grep load | awk '{printf "CPU Load: %.2f\n", $(NF-2)}'
+echo  "######################################" >> $path

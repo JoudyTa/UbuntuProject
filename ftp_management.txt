@@ -1,0 +1,100 @@
+HOST="192.168.243.128"
+USER="zain"
+PASSWORD="7410"
+# $1 is the first argument to the script
+# We are using it as upload directory path
+# If it is '.', file is uploaded to current directory.
+# Rest of the arguments are a list of files to be uploaded.
+# ${@:2} is an array of arguments without first one.
+#ALL_FILE="${@:1}"
+#read -a ALL_FILES
+putMulteFile(){
+echo "please Enter the files you want to upload from our pc to the ftp server:"
+read -a ALL_FILES
+ftp -inv $HOST <<EOF
+user $USER $PASSWORD
+cd files
+mput ${ALL_FILES[@]}
+bye
+EOF
+}
+getMulteFile(){
+echo "please Enter the files you want to download from the FTP server to our pc:"
+read -a ALL_FILES
+ftp -inv $HOST <<EOF
+user $USER $PASSWORD
+cd files
+mget ${ALL_FILES[@]}
+bye
+EOF
+}
+
+putFolder(){
+echo "please Enter the folder you want to upload from our pc to the ftp server:"
+read -a Folde
+zip -r $Folde.zip $Folde
+ftp -inv $HOST <<EOF
+user $USER $PASSWORD
+cd files
+mput $Folde.zip
+bye
+EOF
+sudo unzip /home/zain/ftp/files/$Folde.zip -d /home/zain/ftp/files/
+password $PASSWORD
+sudo rm  /home/zain/ftp/files/$Folde.zip
+password $PASSWORD
+rm  $Folde.zip
+}
+getFolder(){
+echo "please Enter the files or folder you want to download from the FTP server to our pc:"
+read -a Folde
+
+cd /home/zain/ftp/files/
+password $PASSWORD
+sudo zip -r  $Folde.zip  $Folde
+password $PASSWORD
+cd /home/zain/os1/
+ftp -inv $HOST <<EOF
+user $USER $PASSWORD
+cd files
+get $Folde.zip
+bye
+EOF
+unzip $Folde.zip 
+sudo rm /home/zain/ftp/files/$Folde.zip
+password $PASSWORD
+rm  $Folde.zip
+}
+
+clear
+while :
+do
+	# show menu
+	echo "Q4"
+	echo "1) get files From FTP Server"
+	echo "2) put files in FTP Server"
+	echo "3) get one Folder From FTP Server"
+	echo "4) put one Folder in FTP Server"
+	echo "5) Exit"
+	echo "---------------------------------"
+	read -r -p "Select an option please: " option
+	# take action
+	case $option in
+		1) 	
+		getMulteFile
+		;;
+		2) 
+		putMulteFile
+		;;
+		3) 	
+		getFolder
+		;;
+		4) 
+		putFolder
+		;;
+		5) break;;
+		*) echo "please Select between 1 to 3 only"
+	esac
+done
+
+

@@ -1,0 +1,74 @@
+AddRecord(){
+read -r -p "please enter the key: " key
+var=`grep ^$key os1db`
+if [ -z "$var" ]; 
+then 
+read -r -p "please enter the value: " value1
+value=`echo -n $value1 | base64 `
+record="$key : $value"
+
+#TODO
+echo $record >>os1db
+echo "Adding new key to the database (first.os1db)..."
+echo "Done"
+else 
+echo "the key already exists please Try again";
+AddRecord
+fi	
+}
+DeleteRecord(){
+read -r -p "please enter the key that you want to delete: " key
+		#TODO
+		grep -w ^$key os1db
+		if [ $? -ne 0 ];
+		then
+		 echo "Record does not exist"
+		 else
+		 #TODO `
+		 #tmp="`grep -v $key os1db`"
+		 #var=` grep ^$key os1db`
+		 #sed "/$var/d" os1db
+		 #sed  -i -- "s/$var//" os1db
+		 #sed '/^$/d' os1db
+		 #sed '/./!d' os1db
+		 grep -v -w $key os1db >>tmp.txt && mv tmp.txt os1db
+		 #TODO
+		 #cp tmp.txt os1db
+		 echo "Delete value from the database (first.os1db)..."
+		 echo "Done"
+		 fi
+}
+ SearchRecord(){
+ read -r -p "please enter the value that you want to Search: " value1
+		#var=`grep -n $value os1db`
+		value=`echo -n $value1 | base64 `
+		grep $value os1db
+		if [ $? -ne 0 ];
+		then
+		 echo "Record does not exist"
+		 else
+		 echo "The word in this records"
+		 fi
+}
+# set an 
+UpdateRecord(){
+read -r -p "please enter the key that you want to Update: " key
+              
+		#TODO
+		grep -w ^$key os1db
+		if [ $? -ne 0 ];
+		then
+		 echo "Record does not exist"
+		 else
+		 #TODO `
+		 #tmp="`grep -v $key os1db`"
+		 var=`grep -w ^$key os1db | sed 's/.*://'`
+		 read -r -p "please enter the value: " value1
+		 value=`echo -n $value1 | base64 `
+		 sed -i "s/$var/$value/" os1db
+		 #TODO		 
+		 echo "Update value from the database (first.os1db)..."
+		 echo "Done"
+		 fi
+}
+
